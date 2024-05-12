@@ -1,0 +1,100 @@
+package Compilador;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea, T_datos, Int, Igual, Suma, Resta, Multiplicacion, 
+    Division, Parentesis_a, Parentesis_c, Llave_a, Llave_c, Main, 
+    Print, P_coma, Identificador, Numero, End, Escribir, Leer,
+    Estructuras_control, Estructuras_iteracion, Mod, Corchete_a,
+    Corchete_c, Punto, Entrada, Salida, Librerias, Comillas,
+    D_puntos, Diferente, Reservadas,
+    ERROR;
+non terminal INICIO, LIBRERIA, VARIABLES, CONTROL, ITERACION, OPERACION,
+             SENTENCIA, MAIN, END;
+
+start with INICIO;
+
+INICIO ::= 
+    LIBRERIA
+    MAIN
+    VARIABLES
+    ITERACION
+    END
+;
+
+LIBRERIA ::=
+    Librerias
+    Identificador Identificador Identificador P_coma
+;
+
+MAIN ::=
+    T_datos Main Parentesis_a Parentesis_c Llave_a
+    | Main Parentesis_a Parentesis_c Llave_a
+;
+
+VARIABLES ::=
+    T_datos Identificador Identificador Identificador P_coma |
+    T_datos Numero Numero Numero P_coma
+;
+
+ITERACION ::=
+    Estructuras_iteracion 
+    Llave_a
+    SENTENCIA
+    Llave_c
+    Estructuras_iteracion Parentesis_a Identificador Diferente Numero Parentesis_c P_coma
+;
+
+SENTENCIA ::= 
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+
+    Identificador Igual Identificador Suma Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas Salida Identificador Salida Linea Salida Linea P_coma 
+    |
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+
+    Identificador Igual Identificador Resta Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas Salida Identificador Salida Linea Salida Linea P_coma
+    |
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+
+    Identificador Igual Identificador Division Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas Salida Identificador Salida Linea Salida Linea P_coma
+    |
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas P_coma
+    Leer Entrada Identificador P_coma
+
+    Identificador Igual Identificador Multiplicacion Identificador P_coma
+    Escribir Salida Comillas Identificador Identificador Identificador Identificador D_puntos Comillas Salida Identificador Salida Linea Salida Linea P_coma
+
+;
+
+END ::=
+    Identificador Numero P_coma
+    Llave_c
+;
